@@ -800,7 +800,7 @@ public class ManagerImpl implements Manager {
         }
         final var messageBuilder = SignalServiceDataMessage.newBuilder();
         applyMessage(messageBuilder, message);
-        return sendMessage(messageBuilder, recipients, notifySelf, Optional.empty(), !message.noUrgent());
+        return sendMessage(messageBuilder, recipients, notifySelf, Optional.empty(), message.urgent());
     }
 
     @Override
@@ -811,7 +811,7 @@ public class ManagerImpl implements Manager {
     ) throws IOException, AttachmentInvalidException, NotAGroupMemberException, GroupNotFoundException, GroupSendingNotAllowedException, UnregisteredRecipientException, InvalidStickerException {
         final var messageBuilder = SignalServiceDataMessage.newBuilder();
         applyMessage(messageBuilder, message);
-        return sendMessage(messageBuilder, recipients, false, Optional.of(editTargetTimestamp), !message.noUrgent());
+        return sendMessage(messageBuilder, recipients, false, Optional.of(editTargetTimestamp), message.urgent());
     }
 
     private void applyMessage(
