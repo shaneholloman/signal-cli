@@ -33,7 +33,7 @@ import static org.signal.core.util.StringExtensionsKt.emptyIfNull;
 
 public final class StorageSyncModels {
 
-    private final static boolean useBinaryId = false;
+    private final static boolean useBinaryId = true;
     private final static boolean useStringId = true;
 
     private StorageSyncModels() {
