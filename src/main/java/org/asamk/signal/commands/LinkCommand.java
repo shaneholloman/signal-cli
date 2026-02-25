@@ -52,7 +52,7 @@ public class LinkCommand implements ProvisioningCommand {
         try {
             final URI deviceLinkUri = m.getDeviceLinkUri();
             if (System.console() != null) {
-                printQrCode(writer, deviceLinkUri);
+                printQrCode(writer, deviceLinkUri.toString());
             }
             writer.println("{}", deviceLinkUri);
             var number = m.finishDeviceLink(deviceName);
@@ -70,12 +70,14 @@ public class LinkCommand implements ProvisioningCommand {
         }
     }
 
-    private void printQrCode(final PlainTextWriter writer, final URI deviceLinkUri) {
+    private void printQrCode(final PlainTextWriter writer, final String contents) {
         try {
-            var bitMatrix = new QRCodeWriter().encode(deviceLinkUri.toString(), BarcodeFormat.QR_CODE, 0, 0);
+            var bitMatrix = new QRCodeWriter().encode(contents, BarcodeFormat.QR_CODE, 0, 0);
+            writer.println("\033[37;40m");
             for (int y = 0; y < bitMatrix.getHeight(); y += 2) {
                 writer.println(formatQRCodeLinePair(bitMatrix, y));
             }
+            writer.println("\033[39;49m");
         } catch (WriterException e) {
             logger.error("Failed to generate QR code", e);
         }
@@ -86,7 +88,7 @@ public class LinkCommand implements ProvisioningCommand {
         for (int x = 0; x < bitMatrix.getWidth(); x++) {
             boolean upper = bitMatrix.get(x, y);
             boolean lower = y + 1 < bitMatrix.getHeight() && bitMatrix.get(x, y + 1);
-            line.append((upper && lower) ? "█" : (upper ? "▀" : (lower ? "▄" : " ")));
+            line.append((upper && lower) ? " " : (upper ? "▄" : (lower ? "▀" : "█")));
         }
         return line.toString();
     }
